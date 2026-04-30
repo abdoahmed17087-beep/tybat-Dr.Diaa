@@ -216,3 +216,9 @@ button:hover {
     font-size: 0.9rem;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
+.rules p {
+    color:rgb(180, 0, 0);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+}
