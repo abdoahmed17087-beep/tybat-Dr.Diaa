@@ -18,7 +18,7 @@ function checkFastingDay() {
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
-        return "<strong style='color: #d32f2f;'>يجب الصيام اليوم.</strong><br><br>";
+        return "<strong style='color: #d32f2f;'>يوجد صيام اليوم.</strong><br><br>";
     }
     return "";
 }
