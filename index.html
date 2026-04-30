@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الطيبات AI | المساعد الذكي</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header class="main-header">
+            <div class="profile-frame">
+                <img src="NzAweDQwMC5qcGc (1).png" alt="الدكتور ضياء العوضي" class="doctor-photo">
+            </div>
+            <div class="header-info">
+                <h1>الطيبات AI</h1>
+                <p>المساعد الذكي لمنهج الدكتور ضياء العوضي رحمه الله</p>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <main class="card">
+                <h3 class="card-title">اسأل عن صنف محدد ✨</h3>
+                <div class="input-group">
+                    <input type="text" id="userInput" placeholder="مثال: هل التمر مسموح؟">
+                    <button id="generateBtn">اسأل النظام</button>
+                </div>
+                <div id="loading" class="loader-container" style="display: none;">
+                    <div class="spinner"></div>
+                </div>
+                <div id="mealResult" class="result-area"></div>
+            </main>
+
+            <aside class="card highlighted-card">
+                <h3 class="card-title">جدول يومك المقترح 📅</h3>
+                <p class="card-desc">احصل على اقتراحات وجبات كاملة متوافقة مع منهج الطيبات</p>
+                <button id="suggestBtn" class="btn-gold">اقترح لي وجباتي</button>
+                <div id="suggestLoading" class="loader-container" style="display: none;">
+                    <div class="spinner"></div>
+                </div>
+                <div id="suggestResult" class="result-area"></div>
+            </aside>
+        </div>
+
+        <footer class="main-footer">
+            <p>مشروع تخليد منهج "الطيبات" - جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
