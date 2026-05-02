@@ -8,9 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ضع مفتاح Cohere الخاص بك هنا
-const COHERE_API_KEY = "ضع_مفتاح_كوهير_هنا"; 
-const API_URL = "m31kydPbcVMdqYDIo37OKXzWyJZMVeKZMqhbexDG";
+const COHERE_API_KEY = "cohere_Dgc4klk3jL2oaddl5e1T604Z0OX0xLbJiPm5akOM01pFMa"; 
+const API_URL = "https://api.cohere.ai/v1/chat";
 
+// دالة فحص أيام الصيام (اختياري)
 function checkFastingDay() {
     const today = new Date();
     const dayOfWeek = today.getDay(); 
@@ -18,16 +19,19 @@ function checkFastingDay() {
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
-        return "<strong style='color: #d32f2f;'>تنبيه: يجب الصيام اليوم (سنة مؤكدة).</strong><br><br>";
+        return "<strong style='color: #d32f2f;'>تذكير: اليوم يوم صيام مقترح حسب السنة.</strong><br><br>";
     }
     return "";
 }
 
+// التعليمات الكاملة للمنهج التي طلبتها
 const systemPrompt = `
 أنت المساعد الرسمي لمنهج "نظام الطيبات" للدكتور ضياء العوضي.
 التزم بالقواعد التالية بدقة عند الرد ولا تخرج عنها أبداً:
+
 المعلومات الأساسية:
 الماء عند الحاجة.
+
 المسموحات (يُسمح بتكرارها يومياً):
 النشويات: الأرز، البطاطس.
 البروتينات: اللحوم (خروف، بقري، جملي)، الحمام، الكبدة.
@@ -35,14 +39,16 @@ const systemPrompt = `
 الفواكه: التمور، العنب، الجوافة (بدون بذر)، الرمان (بدون بذر)، التين، الموز، الفراولة، المشمش، البخارة (برقوق).
 إضافات: زيتون، زبدة، مربى، نوتيلا، عسل، توست النخالة، جبن (شيدر، جودة، فلمنك).
 المشروبات: الشاي الأخضر فقط.
+
 الممنوعات (يُمنع منعاً باتاً):
 الدقيق ومشتقاته، المكرونة.
 المشروبات الغازية، الشاي الأحمر.
+الدجاج بجميع انواع.
 الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
-ممنوع الفراخ او الدجاج بجميع انواعها.
 البيض، الدجاج، الجمبري، الحبار.
 البقوليات (فول، بسلة، لوبيا، فول سوداني).
 الورقيات، الخضروات، البطيخ، الشمام.
+
 قواعد التشغيل:
 الأكل عند الجوع فقط.
 عند تقديم أي نصيحة، وضح السبب العلمي (كيميائي/حيوي) حسب منهج الدكتور ضياء العوضي.
@@ -50,6 +56,7 @@ const systemPrompt = `
 إذا سُئلت عن شيء غير موجود في القوائم أعلاه، اعتذر بوضوح لعدم توفر المعلومة في منهج النظام.
 اختم نهاية الإجابة دائماً بجملة: "هذه المعلومات قائمة على منهج نظام الطيبات للدكتور ضياء العوضي، ولا تغني عن التشخيص الطبي المتخصص".
 `;
+
 async function callCohere(message) {
     const response = await fetch(API_URL, {
         method: "POST",
@@ -60,14 +67,14 @@ async function callCohere(message) {
         },
         body: JSON.stringify({
             message: message,
-            preamble: systemPrompt, // هنا نضع تعليمات النظام
-            model: "command-r-plus", // أو command-r
-            temperature: 0.3
+            preamble: systemPrompt, // إرسال التعليمات كاملة هنا
+            model: "command-r-plus", // أقوى موديل للعربية من كوهير
+            temperature: 0.3 // لضمان إجابات واقعية وغير خيالية
         })
     });
 
     if (!response.ok) {
-        throw new Error("حدث خطأ في الاتصال بـ Cohere");
+        throw new Error("حدث خطأ في الاتصال بالذكاء الاصطناعي");
     }
 
     const data = await response.json();
@@ -90,8 +97,7 @@ async function askAI() {
         resultDiv.innerHTML = answer.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
-        resultDiv.innerText = "خطأ: تأكد من مفتاح الـ API أو اتصال الإنترنت.";
-        console.error(e);
+        resultDiv.innerHTML = `<span style="color:red">فشل الاتصال: ${e.message}</span>`;
     } finally {
         loading.style.display = "none";
     }
@@ -105,7 +111,7 @@ async function suggestDay() {
     resultDiv.style.display = "none";
 
     try {
-        const answer = await callCohere("اقترح لي جدول وجبات ليوم كامل (إفطار، غداء، عشاء) بناءً على نظام الطيبات فقط.");
+        const answer = await callCohere("بناءً على نظام الطيبات فقط، اقترح لي وجبات ليوم كامل.");
         resultDiv.style.display = "block";
         resultDiv.innerHTML = checkFastingDay() + answer.replace(/\n/g, '<br>');
     } catch (e) {
