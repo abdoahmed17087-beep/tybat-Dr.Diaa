@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const API_KEY = "NBz0opq47Fq2d1lrdIUPaOsUlCxjQRl5vIr3EUAM";
-const API_URL = "/api/chat";
+const API_URL = "https://api.cohere.ai/v1/chat";
 
 // دالة فحص الصيام (تستخدم فقط في المقترح اليومي)
 function checkFastingDay() {
