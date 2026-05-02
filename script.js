@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const API_KEY = "cohere_OItRjK1E0AggyUElbj1C3QcyJH8QMHPJDZc5i5tW2PmMdO";
+const API_KEY = "cohere_m31kydPbcVMdqYDIo37OKXzWyJZMVeKZMqhbexDG428Ekx";
 const API_URL = "https://api.cohere.ai/v1/chat";
 
 // دالة فحص الصيام (تستخدم فقط في المقترح اليومي)
