@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-const API_KEY = "AIzaSyAxHdQ8fChO4nVOE2CrAVj9M58ButgRY_Q";
+// يتم جلب المفتاح مباشرة من بيئة العمل على Vercel
+const API_KEY = process.env.GEMINI_API_KEY;
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-// دالة فحص الصيام
+// دالة فحص الصيام (تظهر في جدول اليوم فقط)
 function checkFastingDay() {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0=الأحد، 1=الإثنين ... 4=الخميس
+    const dayOfWeek = today.getDay(); 
     const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {day: 'numeric'}).format(today);
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
@@ -43,7 +43,6 @@ const systemPrompt = `
 - الدقيق ومشتقاته، المكرونة.
 - المشروبات الغازية، الشاي الأحمر.
 - الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
-ممنوع الفراخ او الدجاج منعا قطاا
 - البيض، الدجاج، الجمبري، الحبار.
 - البقوليات (فول، بسلة، لوبيا، فول سوداني).
 - الورقيات، الخضروات، البطيخ، الشمام.
@@ -52,7 +51,7 @@ const systemPrompt = `
 - الأكل عند الجوع فقط.
 - عند تقديم أي نصيحة، وضح السبب العلمي (كيميائي/حيوي) حسب منهج الدكتور ضياء العوضي.
 - شجع المستخدم على التدرج في تغيير العادات.
-- إذا سُئلت عن شيء غير موجود في القوائم أعلاه، اعتذر بوحشية لعدم توفر المعلومة في منهج النظام.
+- إذا سُئلت عن شيء غير موجود في القوائم أعلاه، اعتذر بوضوح لعدم توفر المعلومة في منهج النظام.
 - اختم نهاية الإجابة دائماً بجملة: "هذه المعلومات قائمة على منهج نظام الطيبات للدكتور ضياء العوضي، ولا تغني عن التشخيص الطبي المتخصص".
 `;
 
