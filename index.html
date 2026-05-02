@@ -3,55 +3,557 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الطيبات AI | المساعد الذكي</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>الطيبات AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-green: #256d3b;
+            --accent-green: #4caf50;
+            --desert-sand: #fdf6e3;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-dark: #1a1a1a;
+            --text-muted: #555555;
+            --white: #ffffff;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --fasting-bg: linear-gradient(135deg, #d32f2f, #ff9800);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--desert-sand);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e6dfcc' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            font-family: 'Cairo', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-wrapper {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sidebar {
+            flex: 1;
+            background: linear-gradient(160deg, var(--primary-green) 0%, #1a4d2e 100%);
+            color: var(--white);
+            padding: 60px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: var(--transition);
+        }
+
+        .avatar-container:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 30px;
+            font-weight: 300;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .alert-pill {
+            font-size: 0.85rem;
+            background: rgba(211, 47, 47, 0.15);
+            color: #ffab91;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            border: 1px solid rgba(211, 47, 47, 0.3);
+        }
+
+        .main-content {
+            flex: 2;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #eeeeee;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-color: #e0e0e0;
+        }
+
+        .fasting-card {
+            background: var(--fasting-bg);
+            color: var(--white);
+            border: none;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fasting-card h2 {
+            color: var(--white) !important;
+            font-weight: 900;
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .card .icon {
+            margin-left: 12px;
+            font-size: 1.6rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn {
+            padding: 18px 30px;
+            background: var(--accent-green);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 109, 59, 0.3);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .description {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            font-weight: 300;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .result-container {
+            margin-top: 25px;
+            display: none;
+            animation: fadeInResult 0.6s ease-out;
+        }
+
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 12px;
+            border-right: 6px solid var(--accent-green);
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            border-left: 1px solid #eee;
+        }
+
+        .result-box strong {
+            color: var(--primary-green);
+            font-weight: 700;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .result-box b {
+            color: #d32f2f;
+        }
+
+        .loading-container {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: var(--text-muted);
+            margin-top: 25px;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .spinner {
+            width: 25px;
+            height: 25px;
+            border: 4px solid rgba(76, 175, 80, 0.1);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid #eeeeee;
+            font-family: 'Jost', sans-serif;
+        }
+
+        @media (max-width: 900px) {
+            .main-wrapper {
+                flex-direction: column;
+                border-radius: 16px;
+            }
+            .sidebar {
+                padding: 40px 20px;
+            }
+            .avatar-container {
+                width: 120px;
+                height: 120px;
+            }
+            .main-content {
+                padding: 30px;
+            }
+            .sidebar h1 { font-size: 1.8rem; }
+            .card { padding: 20px; }
+        }
+    </style>
 </head>
 <body>
-
-    <div class="container">
-        <header class="main-header">
-            <div class="profile-frame">
-                <img src="NzAweDQwMC5qcGc (1).png" alt="الدكتور ضياء العوضي" class="doctor-photo">
+    <div class="main-wrapper">
+        <header class="sidebar">
+            <div class="avatar-container">
+                <img src="NzAweDQwMC5qcGc (1).png" alt="صورة الدكتور ضياء العوضي" class="avatar">
             </div>
-            <div class="header-info">
-                <h1>الطيبات AI</h1>
-                <p>المساعد الذكي لمنهج الدكتور ضياء العوضي رحمه الله</p>
-            </div>
-            <div class="rules">
-                <p>اذا تعطل الموقع قم  برفريش للموقع</p>
-            </div>
+            <h1>الطيبات AI</h1>
+            <p class="subtitle">المساعد الذكي لمنهج الدكتور ضياء العوضي رحمه الله</p>
+            <p class="alert-pill">إذا تعطل الموقع قم بعمل ريفريش</p>
         </header>
 
-        <div class="main-grid">
-            <main class="card">
-                <h3 class="card-title">اسأل عن صنف محدد ✨</h3>
-                <div class="input-group">
-                    <input type="text" id="userInput" placeholder="مثال: هل التمر مسموح؟">
-                    <button id="generateBtn">اسأل النظام</button>
-                </div>
-                <div id="loading" class="loader-container" style="display: none;">
-                    <div class="spinner"></div>
-                </div>
-                <div id="mealResult" class="result-area"></div>
-            </main>
+        <main class="main-content">
+            <section id="fastingCard" class="card fasting-card">
+                <h2><span class="icon">🌙</span> تنبيه صيام الطيبات</h2>
+                <div id="fastingMessage"></div>
+            </section>
 
-            <aside class="card highlighted-card">
-                <h3 class="card-title">جدول يومك المقترح 📅</h3>
-                <p class="card-desc">احصل على اقتراحات وجبات كاملة متوافقة مع منهج الطيبات</p>
-                <button id="suggestBtn" class="btn-gold">اقترح لي وجباتي</button>
-                <div id="suggestLoading" class="loader-container" style="display: none;">
-                    <div class="spinner"></div>
+            <section class="card">
+                <h2><span class="icon">🧠</span> اسأل عن صنف محدد</h2>
+                <p class="description">اكتب أي صنف طعام أو مشروب لتعرف إذا كان مسموحاً أم ممنوعاً.</p>
+                <div class="input-wrapper">
+                    <input type="text" id="userInput" placeholder="مثال: هل العسل مسموح؟">
                 </div>
-                <div id="suggestResult" class="result-area"></div>
-            </aside>
-        </div>
+                <button id="generateBtn" class="btn">اسأل النظام الآن</button>
+                
+                <div id="loading" class="loading-container">
+                    <span class="spinner"></span> جاري استشارة المنهج...
+                </div>
+                <div id="resultContainer" class="result-container">
+                    <div id="mealResult" class="result-box"></div>
+                </div>
+            </section>
 
-        <footer class="main-footer">
-            <p>مشروع تخليد منهج "الطيبات" - جميع الحقوق محفوظة</p>
-        </footer>
+            <section class="card">
+                <h2><span class="icon">📅</span> جدول يومك المقترح</h2>
+                <p class="description">احصل على اقتراحات وجبات كاملة (أرز، بطاطس، لحوم...) متوافقة تماماً مع منهج الطيبات.</p>
+                <button id="suggestBtn" class="btn secondary-btn">اقترح لي وجباتي</button>
+                
+                <div id="suggestLoading" class="loading-container">
+                    <span class="spinner"></span> جاري التحضير...
+                </div>
+                <div id="suggestResultContainer" class="result-container">
+                    <div id="suggestResult" class="result-box"></div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© مشروع تخليد منهج "التطيبات" - جميع الحقوق محفوظة</p>
+                <p style="font-size: 0.8rem; margin-top: 5px;">مدعوم بذكاء Gemini</p>
+            </footer>
+        </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initFastingCheck();
+
+            document.getElementById('generateBtn').addEventListener('click', askAI);
+            document.getElementById('suggestBtn').addEventListener('click', suggestDay);
+
+            document.getElementById('userInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') askAI();
+            });
+        });
+
+        const GEMINI_API_KEY = "AIzaSyBPVzsG6d-MC6Ak8yOfrWqsJBF1-xwpqgI";
+        const API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=" + GEMINI_API_KEY;
+
+        function initFastingCheck() {
+            const fastingCard = document.getElementById('fastingCard');
+            const fastingMessage = document.getElementById('fastingMessage');
+            
+            try {
+                const today = new Date();
+                const dayOfWeek = today.getDay(); 
+                
+                const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {day: 'numeric'}).format(today);
+                const hijriDayStr = hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+                const hijriDay = parseInt(hijriStr);
+
+                const isFasting = (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay));
+
+                if (isFasting) {
+                    fastingCard.style.display = 'block';
+                    let reason = dayOfWeek === 1 ? 'اليوم هو الإثنين' : dayOfWeek === 4 ? 'اليوم هو الخميس' : 'اليوم من الأيام البيض الهجرية';
+                    fastingMessage.innerHTML = `<strong style='font-size: 1.1rem; color: #fff;'>تقبل الله طاعتكم!</strong><br>بناءً على التقويم الهجري ومنهج الطيبات، <b>يجب الصيام اليوم</b> (${reason}).`;
+                }
+            } catch(e) {
+                console.error("خطأ في فحص الصيام:", e);
+            }
+        }
+
+        const systemPrompt = `
+        أنت المساعد الرسمي لمنهج "نظام الطيبات" للدكتور ضياء العوضي.
+        التزم بالقواعد التالية بدقة عند الرد ولا تخرج عنها أبداً:
+
+        المعلومات الأساسية:
+        - الماء عند الحاجة.
+
+        1. المسموحات (يُسمح بتكرارها يومياً):
+        - النشويات: الأرز (بكل أنواعه)، البطاطس.
+        - البروتينات: اللحوم (خروف، بقري، جملي)، الحمام، الكبدة.
+        - الأسماك: مرة واحدة في الشهر فقط.
+        - الفواكه: التمور، العنب، الجوافة (بدون بذر)، الرمان (بدون بذر)، التين، الموز، الفراولة، المشمش، البخارة (برقوق).
+        - إضافات: زيتون، زبدة، مربى، نوتيلا، عسل، توست النخالة، جبن (شيدر، جودة، فلمنك).
+        - المشروبات: الشاي الأخضر فقط.
+
+        2. الممنوعات (يُمنع منعاً باتاً):
+        - الدقيق ومشتقاته (خبز أبيض، فينو)، المكرونة.
+        - المشروبات الغازية، الشاي الأحمر.
+        - الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
+        - ممنوع استخدام الدجاج بجميع أنواعه وأشكاله وكل شيء متعلق بالفراخ منعاً باتاً.
+        - البيض، الجمبري، الحبار.
+        - البقوليات (فول، بسلة، لوبيا، فول سوداني).
+        - الورقيات، الخضروات، البطيخ، الشمام.
+
+        تعليمات تنسيق الإجابة (إجبارية):
+        - يجب عليك تقسيم الإجابة وتنظيمها بدقة بحيث تعرض الوجبات على الشكل التالي:
+        <strong>🍽️ وجبة الإفطار:</strong>
+        [اكتب هنا ما يُسمح بتناوله في وجبة الإفطار بناءً على القواعد أعلاه]
+
+        <strong>🍽️ وجبة الغداء:</strong>
+        [اكتب هنا ما يُسمح بتناوله في وجبة الغداء بناءً على القواعد أعلاه]
+
+        <strong>🍽️ وجبة العشاء:</strong>
+        [اكتب هنا ما يُسمح بتناوله في وجبة العشاء بناءً على القواعد أعلاه]
+
+        قواعد التشغيل:
+        - الأكل عند الجوع فقط.
+        - عند تقديم أي نصيحة، وضح السبب العلمي (كيميائي/حيوي) حسب منهج الدكتور ضياء العوضي.
+        - شجع المستخدم على التدرج في تغيير العادات.
+        - إذا سُئلت عن شيء غير موجود في القوائم أعلاه، اعتذر بوضوح لعدم توفر المعلومة في منهج النظام.
+        - اختم نهاية الإجابة دائماً بجملة: "هذه المعلومات قائمة على منهج نظام الطيبات للدكتور ضياء العوضي، ولا تغني عن التشخيص الطبي المتخصص".
+        `;
+
+        async function askAI() {
+            const input = document.getElementById('userInput').value;
+            const resultDiv = document.getElementById('mealResult');
+            const resultContainer = document.getElementById('resultContainer');
+            const loading = document.getElementById('loading');
+
+            if (!input.trim()) return alert("اكتب سؤالك أولاً!");
+
+            loading.style.display = "flex";
+            resultContainer.style.display = "none";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ 
+                                text: `[System Instructions: ${systemPrompt}]\n\nUser Question: هل يمكنني أكل ${input}؟` 
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    resultContainer.style.display = "block";
+                    resultDiv.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                } else {
+                    resultDiv.innerText = "عذراً، حدث خطأ في معالجة الإجابة.";
+                }
+            } catch (e) {
+                resultContainer.style.display = "block";
+                resultDiv.innerText = "خطأ في الاتصال بسيرفر Gemini الأسطوري.";
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+
+        async function suggestDay() {
+            const resultDiv = document.getElementById('suggestResult');
+            const resultContainer = document.getElementById('suggestResultContainer');
+            const loading = document.getElementById('suggestLoading');
+
+            loading.style.display = "flex";
+            resultContainer.style.display = "none";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ 
+                                text: `[System Instructions: ${systemPrompt}]\n\nاقترح لي جدول وجبات ليوم كامل بناءً على نظام الطيبات فقط، بحيث يتم تقسيمها وتوزيعها على: الإفطار، الغداء، العشاء.` 
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    resultContainer.style.display = "block";
+                    resultDiv.innerHTML = data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                } else {
+                    resultDiv.innerText = "عذراً، حدث خطأ في جلب الاقتراحات.";
+                }
+            } catch (e) {
+                resultContainer.style.display = "block";
+                resultDiv.innerText = "خطأ في جلب الاقتراحات.";
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
