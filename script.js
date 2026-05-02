@@ -67,7 +67,7 @@ async function callCohere(message) {
         body: JSON.stringify({
             message: message,
             preamble: systemPrompt,
-            model: "command-r-plus", 
+            model: "command-r-08-2024", 
             temperature: 0.3
         })
     });
