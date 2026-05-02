@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // مفتاح Cohere الخاص بك
-const COHERE_API_KEY = "cohere_Dgc4klk3jL2oaddl5e1T604Z0OX0xLbJiPm5akOM01pFMa"; 
+const COHERE_API_KEY = "cohere_OpasZec3NgCWGNwU5uutUNjS8Voqmp8RsdeuVw8g0E3NT7"; 
 const API_URL = "https://api.cohere.ai/v1/chat";
 
 // دالة فحص أيام الصيام حسب التقويم الهجري والميلادي
