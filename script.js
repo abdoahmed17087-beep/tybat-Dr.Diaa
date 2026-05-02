@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// يتم جلب المفتاح مباشرة من بيئة العمل على Vercel
-const API_KEY = process.env.GEMINI_API_KEY;
+// المفتاح الخاص بك موضوع هنا بشكل كامل وسليم
+const API_KEY = "AIzaSyAxHdQ8fChO4nVOE2CrAVj9M58ButgRY_Q";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 // دالة فحص الصيام (تظهر في جدول اليوم فقط)
