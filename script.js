@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ضع مفتاحك المجاني هنا (يبدأ بـ AIza...)
-const API_KEY = "هنا_تضع_مفتاحك_الحقيقي";
+const API_KEY = "AIzaSyAxHdQ8fChO4nVOE2CrAVj9M58ButgRY_Q";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 // دالة فحص الصيام (تظهر في جدول اليوم فقط)
