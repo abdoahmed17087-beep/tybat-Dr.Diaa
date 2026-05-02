@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const API_KEY = "api";
+const API_KEY = "NBz0opq47Fq2d1lrdIUPaOsUlCxjQRl5vIr3EUAM";
 const API_URL = "/api/chat";
 
 // دالة فحص الصيام (تستخدم فقط في المقترح اليومي)
