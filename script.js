@@ -7,17 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ضع مفتاح الـ API الخاص بـ Grok هنا
-const API_KEY = "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"; // ضع المفتاح الكامل الخاص بك هنا
+// يتم جلب المفتاح تلقائياً من بيئة العمل الآمنة في Vercel
 const API_URL = "https://api.x.ai/v1/chat/completions";
 
-// دالة فحص الصيام (تظهر في جدول اليوم فقط)
 function checkFastingDay() {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0=الأحد، 1=الإثنين ... 4=الخميس
+    const dayOfWeek = today.getDay();
     const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {day: 'numeric'}).format(today);
-    
-    // تم تصحيح الخطأ هنا
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
@@ -46,6 +42,7 @@ const systemPrompt = `
 - المشروبات الغازية، الشاي الأحمر.
 - الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
 - البيض، الدجاج، الجمبري، الحبار.
+ -الدجاج بجميع انواعة.
 - البقوليات (فول، بسلة، لوبيا، فول سوداني).
 - الورقيات، الخضروات، البطيخ، الشمام.
 
@@ -71,11 +68,11 @@ async function askAI() {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { 
-                "Authorization": `Bearer ${API_KEY}`,
+                "Authorization": `Bearer process.env.GROK_API_KEY`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "grok-beta", // النموذج المعتمد من Grok
+                model: "grok-beta",
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: input }
@@ -111,7 +108,7 @@ async function suggestDay() {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { 
-                "Authorization": `Bearer ${API_KEY}`,
+                "Authorization": `Bearer process.env.GROK_API_KEY`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
