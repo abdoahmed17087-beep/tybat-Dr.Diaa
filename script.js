@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ضع مفتاح الـ API الخاص بـ Grok هنا (يبدأ بـ xai-...)
-const API_KEY = "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";
+// ضع مفتاح الـ API الخاص بـ Grok هنا
+const API_KEY = "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"; // ضع المفتاح الكامل الخاص بك هنا
 const API_URL = "https://api.x.ai/v1/chat/completions";
 
 // دالة فحص الصيام (تظهر في جدول اليوم فقط)
@@ -16,7 +16,9 @@ function checkFastingDay() {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0=الأحد، 1=الإثنين ... 4=الخميس
     const hijriDate = new Intl.DateTimeFormat('ar-SA-u-ca-islamic', {day: 'numeric'}).format(today);
-    const hijriDay = parseInt(constriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+    
+    // تم تصحيح الخطأ هنا
+    const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
         return "<strong style='color: #d32f2f;'>يجب الصيام اليوم.</strong><br><br>";
@@ -35,7 +37,7 @@ const systemPrompt = `
 - النشويات: الأرز، البطاطس.
 - البروتينات: اللحوم (خروف، بقري، جملي)، الحمام، الكبدة.
 - الأسماك: مرة واحدة في الشهر فقط.
-- الفواكه: التمور، العنب، الجوافة (بدون بذر)، الرمان (بدون بذر)، التين، Mوز (الموز)، الفراولة، المشمش، البخارة (برقوق).
+- الفواكه: التمور، العنب، الجوافة (بدون بذر)، الرمان (بدون بذر)، التين، الموز، الفراولة، المشمش، البخارة (برقوق).
 - إضافات: زيتون، زبدة، مربى، نوتيلا، عسل، توست النخالة، جبن (شيدر، جودة، فلمنك).
 - المشروبات: الشاي الأخضر فقط.
 
@@ -113,7 +115,7 @@ async function suggestDay() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "grok-beta", // النموذج المعتمد من Grok
+                model: "grok-beta",
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: "اقترح لي جدول وجبات ليوم كامل بناءً على نظام الطيبات فقط." }
