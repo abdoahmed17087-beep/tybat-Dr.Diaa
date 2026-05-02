@@ -7,10 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const API_KEY = "NBz0opq47Fq2d1lrdIUPaOsUlCxjQRl5vIr3EUAM";
+const API_KEY = "cohere_OItRjK1E0AggyUElbj1C3QcyJH8QMHPJDZc5i5tW2PmMdO";
 const API_URL = "https://api.cohere.ai/v1/chat";
 
-// دالة فحص الصيام (تستخدم فقط في المقترح اليومي)
 function checkFastingDay() {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 1=الاثنين، 4=الخميس
@@ -18,7 +17,7 @@ function checkFastingDay() {
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
-        return "<strong style='color: #d32f2f;'>يوجد صيام اليوم.</strong><br><br>";
+        return "<strong style='color: #d32f2f;'>يجب الصيام اليوم.</strong><br><br>";
     }
     return "";
 }
@@ -40,7 +39,6 @@ const systemPrompt = `
 2. الممنوعات (يُمنع منعاً باتاً):
 - الدقيق ومشتقاته، المكرونة.
 - المشروبات الغازية، الشاي الأحمر.
--الدجاج بجميع انواعة وجميع مشتقاتة مثل الكبد والقوانص واي شيء متعلق بالفراخ.
 - الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
 - البيض، الدجاج، الجمبري، الحبار.
 - البقوليات (فول، بسلة، لوبيا، فول سوداني).
@@ -72,7 +70,6 @@ async function askAI() {
         });
         const data = await response.json();
         resultDiv.style.display = "block";
-        // هنا تظهر الإجابة مباشرة بدون تنبيه الصيام
         resultDiv.innerHTML = data.text.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
@@ -97,12 +94,11 @@ async function suggestDay() {
                 message: "اقترح لي جدول وجبات ليوم كامل بناءً على نظام الطيبات فقط.", 
                 preamble: systemPrompt, 
                 model: "command-r-08-2024",
-                temperature: 0.6
+                temperature: 0.6 
             })
         });
         const data = await response.json();
         resultDiv.style.display = "block";
-        // هنا يظهر تنبيه الصيام مع المقترح
         resultDiv.innerHTML = checkFastingDay() + data.text.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
