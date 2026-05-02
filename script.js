@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const API_KEY = "cohere_OItRjK1E0AggyUElbj1C3QcyJH8QMHPJDZc5i5tW2PmMdO";
 const API_URL = "https://api.cohere.ai/v1/chat";
 
+// دالة فحص الصيام (تستخدم فقط في المقترح اليومي)
 function checkFastingDay() {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 1=الاثنين، 4=الخميس
@@ -70,6 +71,7 @@ async function askAI() {
         });
         const data = await response.json();
         resultDiv.style.display = "block";
+        // هنا يتم عرض الإجابة مباشرة بدون عرض التنبيه
         resultDiv.innerHTML = data.text.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
@@ -99,6 +101,7 @@ async function suggestDay() {
         });
         const data = await response.json();
         resultDiv.style.display = "block";
+        // هنا تظهر رسالة الصيام لأنها خاصة بجدول اليوم
         resultDiv.innerHTML = checkFastingDay() + data.text.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
