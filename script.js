@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ضع مفتاح Cohere الخاص بك هنا
+// مفتاح Cohere الخاص بك
 const COHERE_API_KEY = "cohere_Dgc4klk3jL2oaddl5e1T604Z0OX0xLbJiPm5akOM01pFMa"; 
 const API_URL = "https://api.cohere.ai/v1/chat";
 
-// دالة فحص أيام الصيام (اختياري)
+// دالة فحص أيام الصيام حسب التقويم الهجري والميلادي
 function checkFastingDay() {
     const today = new Date();
     const dayOfWeek = today.getDay(); 
@@ -19,12 +19,12 @@ function checkFastingDay() {
     const hijriDay = parseInt(hijriDate.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
     if (dayOfWeek === 1 || dayOfWeek === 4 || [13, 14, 15].includes(hijriDay)) {
-        return "<strong style='color: #d32f2f;'>تذكير: اليوم يوم صيام مقترح حسب السنة.</strong><br><br>";
+        return "<div style='background: #fff3cd; padding: 10px; border-radius: 10px; border: 1px solid #ffeeba; margin-bottom: 15px; color: #856404;'>⚠️ <strong>تذكير:</strong> اليوم موافق لأيام الصيام (الاثنين/الخميس أو الأيام البيض).</div>";
     }
     return "";
 }
 
-// التعليمات الكاملة للمنهج التي طلبتها
+// منهج نظام الطيبات بالكامل كما طلبته
 const systemPrompt = `
 أنت المساعد الرسمي لمنهج "نظام الطيبات" للدكتور ضياء العوضي.
 التزم بالقواعد التالية بدقة عند الرد ولا تخرج عنها أبداً:
@@ -43,7 +43,6 @@ const systemPrompt = `
 الممنوعات (يُمنع منعاً باتاً):
 الدقيق ومشتقاته، المكرونة.
 المشروبات الغازية، الشاي الأحمر.
-الدجاج بجميع انواع.
 الحليب ومشتقاته (قريش، أجبان طازجة، رايب).
 البيض، الدجاج، الجمبري، الحبار.
 البقوليات (فول، بسلة، لوبيا، فول سوداني).
@@ -67,14 +66,14 @@ async function callCohere(message) {
         },
         body: JSON.stringify({
             message: message,
-            preamble: systemPrompt, // إرسال التعليمات كاملة هنا
-            model: "command-r-plus", // أقوى موديل للعربية من كوهير
-            temperature: 0.3 // لضمان إجابات واقعية وغير خيالية
+            preamble: systemPrompt,
+            model: "command-r-plus", 
+            temperature: 0.3
         })
     });
 
     if (!response.ok) {
-        throw new Error("حدث خطأ في الاتصال بالذكاء الاصطناعي");
+        throw new Error("عذراً، حدث خطأ في الاتصال بالخادم. تأكد من رصيد الـ API.");
     }
 
     const data = await response.json();
@@ -94,10 +93,11 @@ async function askAI() {
     try {
         const answer = await callCohere(input);
         resultDiv.style.display = "block";
+        // تحويل السطور الجديدة إلى <br> وإضافة تنسيق للنقاط
         resultDiv.innerHTML = answer.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
-        resultDiv.innerHTML = `<span style="color:red">فشل الاتصال: ${e.message}</span>`;
+        resultDiv.innerHTML = `<span style="color:red">⚠️ ${e.message}</span>`;
     } finally {
         loading.style.display = "none";
     }
@@ -111,12 +111,12 @@ async function suggestDay() {
     resultDiv.style.display = "none";
 
     try {
-        const answer = await callCohere("بناءً على نظام الطيبات فقط، اقترح لي وجبات ليوم كامل.");
+        const answer = await callCohere("اقترح لي جدول وجبات ليوم كامل (إفطار، غداء، عشاء) بناءً على مسموحات نظام الطيبات فقط.");
         resultDiv.style.display = "block";
         resultDiv.innerHTML = checkFastingDay() + answer.replace(/\n/g, '<br>');
     } catch (e) {
         resultDiv.style.display = "block";
-        resultDiv.innerText = "خطأ في جلب الاقتراحات.";
+        resultDiv.innerText = "حدث خطأ أثناء جلب الاقتراحات.";
     } finally {
         loading.style.display = "none";
     }
